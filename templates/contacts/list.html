@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Contatos | PITEP CJ{% endblock %}
+{% block page_label %}Pessoas{% endblock %}
+
+{% block content %}
+<main class="page-shell">
+  <section class="page-head">
+    <div>
+      <p class="eyebrow">CRM territorial</p>
+      <h1>Contatos</h1>
+    </div>
+    <form method="get" class="search-form">
+      <input name="q" value="{{ query }}" placeholder="Buscar por nome, telefone, cidade, fonte ou observação">
+      <button type="submit">Buscar</button>
+    </form>
+  </section>
+  <section class="workbench">
+    <table>
+      <thead>
+        <tr><th>Nome</th><th>Telefone</th><th>Cidade</th><th>Perfil</th><th>Fonte</th><th>Responsável</th></tr>
+      </thead>
+      <tbody>
+        {% for contact in contacts %}
+          <tr>
+            <td>{{ contact.full_name }}</td>
+            <td>{{ contact.phone|default:"-" }}</td>
+            <td>{{ contact.city|default:"-" }}</td>
+            <td>{{ contact.profile|default:"-" }}</td>
+            <td>{{ contact.source|default:"-" }}</td>
+            <td>{{ contact.owner|default:"-" }}</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="6">Nenhum contato cadastrado ainda.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+</main>
+{% endblock %}

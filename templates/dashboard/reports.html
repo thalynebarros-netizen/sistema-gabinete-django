@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+
+{% block title %}Relatórios | PITEP CJ{% endblock %}
+{% block page_label %}Relatórios{% endblock %}
+
+{% block content %}
+<main class="page-shell">
+  <section class="reports-hero">
+    <div>
+      <p class="eyebrow">Inteligência do CRM</p>
+      <h1>Relatórios</h1>
+      <p>Leitura rápida dos leads, origem, cidades, qualidade dos dados e evolução dos atendimentos.</p>
+    </div>
+    <div class="report-actions">
+      <a class="primary-action" href="{% url 'dashboard:reports_export_csv' %}">Exportar CSV</a>
+      <span>Base CRM</span>
+    </div>
+  </section>
+
+  <section class="report-tabs" aria-label="Seções do relatório">
+    <a href="#visao">Resumo executivo</a>
+    <a href="#origem">Públicos e origem</a>
+    <a href="#cidades">Leads e cidades</a>
+    <a href="#atendimentos">Atendimentos</a>
+    <a href="#qualidade">Qualidade</a>
+  </section>
+
+  <section id="visao" class="report-section">
+    <div class="section-title">
+      <div>
+        <p class="eyebrow">Visão geral</p>
+        <h2>Indicadores principais</h2>
+      </div>
+    </div>
+    <div class="report-metrics">
+      <article><span>Total</span><strong>{{ total }}</strong><small>leads CRM</small></article>
+      <article><span>Com telefone</span><strong>{{ with_phone }}</strong><small>{{ phone_pct }}% da base</small></article>
+      <article><span>Com cidade</span><strong>{{ with_city }}</strong><small>{{ city_pct }}% da base</small></article>
+      <article><span>Atendidos</span><strong>{{ with_interaction }}</strong><small>{{ interaction_pct }}% com histórico</small></article>
+      <article><span>Revisar nome</span><strong>{{ needs_review }}</strong><small>{{ review_pct }}% com alerta</small></article>
+    </div>
+  </section>
+
+  <section id="origem" class="report-grid">
+    <article class="report-card">
+      <div class="card-head">
+        <div>
+          <h2>Origem dos contatos</h2>
+          <p>Principais canais de entrada do CRM.</p>
+        </div>
+      </div>
+      <div class="bar-list">
+        {% for row in top_sources %}
+          <div class="report-bar">
+            <div><span>{{ row.label }}</span><b>{{ row.value }}</b></div>
+            <i><em style="width: {{ row.width }}%"></em></i>
+          </div>
+        {% endfor %}
+      </div>
+    </article>
+
+    <article class="report-card">
+      <div class="card-head">
+        <div>
+          <h2>Status do CRM</h2>
+          <p>Etapas mais frequentes na base.</p>
+        </div>
+      </div>
+      <div class="donut-wrap">
+        <div class="donut-chart" style="--p: {{ phone_pct_width }};"></div>
+        <div>
+          {% for row in top_statuses %}
+            <p class="legend-row"><span></span>{{ row.label }} <b>{{ row.value }}</b></p>
+          {% endfor %}
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section id="cidades" class="report-grid">
+    <article class="report-card">
+      <div class="card-head">
+        <div>
+          <h2>Top cidades</h2>
+          <p>Ranking geográfico dos leads.</p>
+        </div>
+      </div>
+      <div class="city-ranking">
+        {% for row in top_cities %}
+          <div>
+            <span>{{ forloop.counter }}</span>
+            <strong>{{ row.label }}</strong>
+            <em>{{ row.value }}</em>
+          </div>
+        {% endfor %}
+      </div>
+    </article>
+
+    <article class="report-card map-card">
+      <div class="card-head">
+        <div>
+          <h2>Mapa de concentração</h2>
+          <p>Bolhas proporcionais ao volume de leads por cidade.</p>
+        </div>
+      </div>
+      <div class="report-map">
+        {% for city in city_map %}
+          <span
+            class="map-bubble"
+            style="left: {{ city.x }}%; top: {{ city.y }}%; width: {{ city.size }}px; height: {{ city.size }}px;"
+            title="{{ city.label }} - {{ city.value }} leads">
+            <b>{{ city.label }}</b>
+          </span>
+        {% endfor %}
+      </div>
+    </article>
+  </section>
+
+  <section id="atendimentos" class="report-grid">
+    <article class="report-card">
+      <div class="card-head">
+        <div>
+          <h2>Atendimentos por dia</h2>
+          <p>Distribuição dos registros criados no sistema.</p>
+        </div>
+      </div>
+      <div class="bar-list">
+        {% for row in weekday_rows %}
+          <div class="report-bar">
+            <div><span>{{ row.label }}</span><b>{{ row.value }}</b></div>
+            <i><em style="width: {{ row.width }}%"></em></i>
+          </div>
+        {% empty %}
+          <p class="muted">Ainda não há atendimentos registrados.</p>
+        {% endfor %}
+      </div>
+    </article>
+
+    <article class="report-card">
+      <div class="card-head">
+        <div>
+          <h2>Horários de atendimento</h2>
+          <p>Quando a equipe mais registra interações.</p>
+        </div>
+      </div>
+      <div class="heatline">
+        {% for row in hour_rows %}
+          <span style="--p: {{ row.width }};">{{ row.label }}</span>
+        {% empty %}
+          <p class="muted">Sem dados de horário ainda.</p>
+        {% endfor %}
+      </div>
+    </article>
+  </section>
+
+  <section id="qualidade" class="report-card">
+    <div class="card-head">
+      <div>
+        <h2>Completude dos dados</h2>
+        <p>Campos essenciais para contato e planejamento territorial.</p>
+      </div>
+    </div>
+    <div class="quality-grid">
+      <article>
+        <span>Telefone</span>
+        <strong>{{ phone_pct }}%</strong>
+        <i><em style="width: {{ phone_pct_width }}%"></em></i>
+      </article>
+      <article>
+        <span>Cidade</span>
+        <strong>{{ city_pct }}%</strong>
+        <i><em style="width: {{ city_pct_width }}%"></em></i>
+      </article>
+      <article>
+        <span>Atendimento</span>
+        <strong>{{ interaction_pct }}%</strong>
+        <i><em style="width: {{ interaction_pct_width }}%"></em></i>
+      </article>
+      <article>
+        <span>Nomes revisados</span>
+        <strong>{{ review_pct }}% pendente</strong>
+        <i><em class="warn" style="width: {{ review_pct_width }}%"></em></i>
+      </article>
+    </div>
+  </section>
+</main>
+{% endblock %}

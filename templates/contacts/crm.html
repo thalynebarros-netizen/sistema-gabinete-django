@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}CRM | PITEP CJ{% endblock %}
+{% block page_label %}CRM de atendimento{% endblock %}
+
+{% block content %}
+<main class="page-shell">
+  <section class="crm-toolbar">
+    <div>
+      <p class="eyebrow">Relacionamento</p>
+      <h1>Leads e atendimentos</h1>
+      <p>Base organizada para contato, revisão, acompanhamento e registro pela equipe.</p>
+    </div>
+    <div class="crm-metrics">
+      <article><span>Total CRM</span><strong>{{ total_crm }}</strong></article>
+      <article><span>Revisar</span><strong>{{ total_review }}</strong></article>
+    </div>
+  </section>
+
+  <form method="get" class="crm-filters">
+    <input name="q" value="{{ query }}" placeholder="Buscar por nome, telefone, cidade, fonte ou observação">
+    <select name="status">
+      <option value="">Todos os status</option>
+      {% for status in status_options %}
+        <option value="{{ status }}" {% if status == selected_status %}selected{% endif %}>{{ status }}</option>
+      {% endfor %}
+    </select>
+    <select name="city">
+      <option value="">Todas as cidades</option>
+      {% for city in city_options %}
+        <option value="{{ city }}" {% if city == selected_city %}selected{% endif %}>{{ city }}</option>
+      {% endfor %}
+    </select>
+    <label class="check-filter">
+      <input type="checkbox" name="review" value="1" {% if review == "1" %}checked{% endif %}>
+      Nome para revisar
+    </label>
+    <button type="submit">Filtrar</button>
+    <a class="ghost-btn" href="{% url 'contacts:crm' %}">Limpar</a>
+  </form>
+
+  <section class="pipeline-tabs" aria-label="Ações rápidas">
+    <a href="{% url 'contacts:crm' %}">Todos</a>
+    <a href="{% url 'contacts:crm' %}?status=1 contato">1 contato</a>
+    <a href="{% url 'contacts:crm' %}?status=Retomar contato">Retomar</a>
+    <a href="{% url 'contacts:crm' %}?review=1">Revisar nomes</a>
+  </section>
+
+  <section class="crm-board">
+    {% for contact in contacts %}
+      <article class="lead-card {% if contact.needs_review %}needs-review{% endif %}">
+        <div class="lead-avatar">{{ contact.full_name|first|upper }}</div>
+        <div class="lead-main">
+          <div>
+            <span class="status-pill">{{ contact.crm_status|default:"Sem status" }}</span>
+            {% if contact.needs_review %}<span class="review-pill">revisar nome</span>{% endif %}
+          </div>
+          <h2><a href="{% url 'contacts:crm_detail' contact.pk %}">{{ contact.full_name }}</a></h2>
+          <p>{{ contact.city|default:"Cidade não informada" }}{% if contact.source %} · {{ contact.source }}{% endif %}</p>
+          {% if contact.last_interaction %}
+            <p class="lead-last">Último registro: {{ contact.last_interaction.happened_at|date:"d/m/Y H:i" }}</p>
+          {% else %}
+            <p class="lead-last muted">Sem atendimento registrado.</p>
+          {% endif %}
+        </div>
+        <div class="lead-actions">
+          {% if contact.phone %}
+            <a href="https://wa.me/55{{ contact.phone }}" target="_blank" rel="noopener">WhatsApp</a>
+          {% endif %}
+          <a href="{% url 'contacts:crm_detail' contact.pk %}">Atender</a>
+        </div>
+      </article>
+    {% empty %}
+      <article class="workbench">Nenhum lead encontrado com esses filtros.</article>
+    {% endfor %}
+  </section>
+</main>
+{% endblock %}

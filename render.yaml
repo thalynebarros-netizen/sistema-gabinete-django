@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: pitep-camila-jara
+    runtime: python
+    buildCommand: "bash build.sh"
+    startCommand: "gunicorn config.wsgi:application"
+    envVars:
+      - key: DJANGO_DEBUG
+        value: "false"
+      - key: DJANGO_ALLOWED_HOSTS
+        value: ".onrender.com,localhost,127.0.0.1"
+      - key: DJANGO_CSRF_TRUSTED_ORIGINS
+        value: "https://*.onrender.com"
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: ADMIN_USERNAME
+        value: "thalyne"
+      - key: ADMIN_EMAIL
+        value: "thalyne.barros@ufms.br"
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: pitep-camila-jara-db
+          property: connectionString
+
+databases:
+  - name: pitep-camila-jara-db
+    databaseName: pitep_cj
+    user: pitep_cj_user

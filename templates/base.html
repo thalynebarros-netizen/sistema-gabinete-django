@@ -1,0 +1,56 @@
+{% load static %}
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Sistema do Gabinete{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/system.css' %}">
+  </head>
+  <body>
+    {% if user.is_authenticated %}
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a class="brand" href="{% url 'dashboard:home' %}">
+          <b>CJ</b>
+          <span>
+            <strong>PITEP CJ</strong>
+            <small>Inteligência territorial</small>
+          </span>
+        </a>
+        <nav class="side-nav" aria-label="Menu principal">
+          <a href="{% url 'dashboard:home' %}"><span>▦</span> Dashboard</a>
+          <a href="{% url 'contacts:crm' %}"><span>☏</span> CRM</a>
+          <a href="{% url 'dashboard:reports' %}"><span>▥</span> Relatórios</a>
+          <a href="{% url 'contacts:list' %}"><span>●</span> Pessoas</a>
+          <a href="/admin/"><span>⚙</span> Administração</a>
+        </nav>
+        <div class="sidebar-foot">
+          <small>Usuário</small>
+          <strong>{{ user.get_short_name|default:user.username }}</strong>
+          <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Sair</button>
+          </form>
+        </div>
+      </aside>
+      <div class="app-main">
+        <header class="topbar">
+          <div>
+            <span class="topbar-kicker">Sistema do Gabinete</span>
+            <strong>{% block page_label %}Painel operacional{% endblock %}</strong>
+          </div>
+          <nav class="top-actions">
+            <a href="{% url 'contacts:crm' %}">Novo atendimento</a>
+            <a href="{% url 'dashboard:reports_export_csv' %}">Exportar CSV</a>
+            <a href="/admin/">Admin</a>
+          </nav>
+        </header>
+    {% endif %}
+        {% block content %}{% endblock %}
+    {% if user.is_authenticated %}
+      </div>
+    </div>
+    {% endif %}
+  </body>
+</html>

@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}{{ contact.full_name }} | CRM{% endblock %}
+{% block page_label %}Atendimento CRM{% endblock %}
+
+{% block content %}
+<main class="page-shell">
+  <a class="back-link" href="{% url 'contacts:crm' %}">← Voltar ao CRM</a>
+
+  <section class="lead-detail-hero">
+    <div>
+      <p class="eyebrow">Contato CRM</p>
+      <h1>{{ contact.full_name }}</h1>
+      <p>{{ contact.city|default:"Cidade não informada" }} · {{ contact.crm_status|default:"Sem status" }}</p>
+      {% if contact.needs_review %}<span class="review-pill">nome para revisar</span>{% endif %}
+    </div>
+    <div class="lead-actions">
+      {% if contact.phone %}
+        <a href="https://wa.me/55{{ contact.phone }}" target="_blank" rel="noopener">Abrir WhatsApp</a>
+      {% endif %}
+      <a href="/admin/contacts/contact/{{ contact.pk }}/change/">Editar no Admin</a>
+    </div>
+  </section>
+
+  <section class="detail-grid">
+    <article class="workbench">
+      <h2>Dados do lead</h2>
+      <dl class="lead-data">
+        <dt>Telefone</dt><dd>{{ contact.phone|default:"-" }}</dd>
+        <dt>Fonte</dt><dd>{{ contact.source|default:"-" }}</dd>
+        <dt>Status CRM</dt><dd>{{ contact.crm_status|default:"-" }}</dd>
+        <dt>Responsável</dt><dd>{{ contact.crm_luva.responsavel|default:"-" }}</dd>
+        <dt>Último contato</dt><dd>{{ contact.crm_luva.ultimo_contato|default:"-" }}</dd>
+        <dt>Descrição</dt><dd>{{ contact.notes_summary|default:"-" }}</dd>
+      </dl>
+    </article>
+
+    <article class="workbench">
+      <h2>Registrar atendimento</h2>
+      <form method="post" class="interaction-form">
+        {% csrf_token %}
+        <label>Canal
+          <select name="channel">
+            <option>WhatsApp</option>
+            <option>Ligação</option>
+            <option>Instagram</option>
+            <option>Presencial</option>
+          </select>
+        </label>
+        <label>Resumo do atendimento
+          <textarea name="summary" required placeholder="Ex.: respondeu, pediu retorno, confirmou apoio, precisa atualizar cidade..."></textarea>
+        </label>
+        <label>Próxima ação
+          <input name="next_action" placeholder="Ex.: retornar com convite para reunião">
+        </label>
+        <label>Data prevista
+          <input name="next_date" type="date">
+        </label>
+        <button type="submit">Salvar atendimento</button>
+      </form>
+    </article>
+  </section>
+
+  <section class="workbench">
+    <h2>Histórico</h2>
+    <div class="timeline">
+      {% for item in contact.interactions.all %}
+        <article>
+          <strong>{{ item.channel }}</strong>
+          <span>{{ item.happened_at|date:"d/m/Y H:i" }} · {{ item.author }}</span>
+          <p>{{ item.summary|linebreaksbr }}</p>
+        </article>
+      {% empty %}
+        <p class="muted">Nenhum atendimento registrado ainda.</p>
+      {% endfor %}
+    </div>
+  </section>
+</main>
+{% endblock %}

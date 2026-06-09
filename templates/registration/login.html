@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Entrar | Sistema do Gabinete{% endblock %}
+
+{% block content %}
+<main class="login-shell">
+  <section class="login-panel">
+    <p class="eyebrow">Acesso interno</p>
+    <h1>Entrar no sistema</h1>
+    <p>Use a conta autorizada da equipe para acessar dados e atendimentos.</p>
+    <form method="post" class="login-form">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Entrar</button>
+    </form>
+  </section>
+</main>
+{% endblock %}

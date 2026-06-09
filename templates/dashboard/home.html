@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | PITEP CJ{% endblock %}
+{% block page_label %}Dashboard{% endblock %}
+
+{% block content %}
+<main class="page-shell">
+  <section class="welcome-panel">
+    <div>
+      <p class="eyebrow">Central de trabalho</p>
+      <h1>Bom dia, {{ user.get_short_name|default:user.username }}</h1>
+      <p>Organize contatos, atendimentos, segmentos e dados estratégicos do gabinete em um só lugar.</p>
+    </div>
+    <a class="primary-action" href="{% url 'contacts:crm' %}">Abrir CRM</a>
+  </section>
+
+  <section class="metric-grid">
+    <article><span>Contatos gerais</span><strong>{{ contact_count }}</strong><em>base consolidada</em></article>
+    <article><span>Leads CRM</span><strong>{{ crm_count }}</strong><em>relacionamento e atendimento</em></article>
+    <article><span>Revisar nome</span><strong>{{ review_count }}</strong><em>cadastros com alerta</em></article>
+    <article><span>Mensagens</span><strong>{{ message_count }}</strong><em>histórico futuro</em></article>
+  </section>
+
+  <section class="tool-section">
+    <div class="section-title">
+      <div>
+        <p class="eyebrow">Ferramentas</p>
+        <h2>Atalhos do gabinete</h2>
+      </div>
+      <span>Fluxo operacional</span>
+    </div>
+    <div class="tool-grid">
+      <a class="tool-card hot" href="{% url 'contacts:crm' %}">
+        <span class="tool-icon">+</span>
+        <strong>Atendimentos</strong>
+        <small>Filtre leads, abra WhatsApp e registre conversas com histórico.</small>
+      </a>
+      <a class="tool-card" href="{% url 'dashboard:reports' %}">
+        <span class="tool-icon">▥</span>
+        <strong>Relatórios</strong>
+        <small>Veja cidades, origem dos contatos, qualidade da base e status do CRM.</small>
+      </a>
+      <a class="tool-card green" href="{% url 'contacts:list' %}">
+        <span class="tool-icon">●</span>
+        <strong>Pessoas</strong>
+        <small>Consulte a base geral por nome, telefone, cidade, fonte ou observação.</small>
+      </a>
+      <a class="tool-card amber" href="{% url 'dashboard:pitep' %}">
+        <span class="tool-icon">✦</span>
+        <strong>Plano PITEP</strong>
+        <small>Entenda as fases para transformar o painel em sistema inteligente do gabinete.</small>
+      </a>
+    </div>
+  </section>
+
+  <section class="workbench split-panel">
+    <div>
+      <h2>Próximo foco</h2>
+      <p>O Django será a base do sistema interno: login, banco de dados, contatos, CRM, emendas, mapa territorial, tarefas e integração futura com WhatsApp API.</p>
+    </div>
+    <div class="money-row">
+      <span>Emendas destinadas: <b>R$ {{ emenda_destined|floatformat:2 }}</b></span>
+      <span>Valor pago: <b>R$ {{ emenda_paid|floatformat:2 }}</b></span>
+    </div>
+  </section>
+</main>
+{% endblock %}

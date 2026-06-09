@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}PITEP | Sistema do Gabinete{% endblock %}
+{% block page_label %}Plano PITEP{% endblock %}
+
+{% block content %}
+<main class="page-shell">
+  <section class="reports-hero">
+    <div>
+      <p class="eyebrow">Programa de Inteligência Territorial e Engajamento Político</p>
+      <h1>PITEP</h1>
+      <p>Plano de expansão para conectar dados, equipe, atendimento, território e decisões estratégicas do gabinete.</p>
+    </div>
+    <div class="report-actions">
+      <a class="primary-action" href="{% url 'contacts:crm' %}">Abrir CRM</a>
+      <a class="ghost-btn" href="{% url 'dashboard:reports' %}">Ver relatórios</a>
+    </div>
+  </section>
+
+  <section class="tool-section">
+    <div class="section-title">
+      <div>
+        <p class="eyebrow">Pilares</p>
+        <h2>O que o sistema vai integrar</h2>
+      </div>
+    </div>
+    <div class="tool-grid">
+      {% for pillar in pillars %}
+        <article class="tool-card {% if forloop.counter == 1 %}hot{% elif forloop.counter == 2 %}amber{% elif forloop.counter == 3 %}green{% endif %}">
+          <span class="tool-icon">{{ forloop.counter }}</span>
+          <strong>{{ pillar.title }}</strong>
+          <small>{{ pillar.text }}</small>
+        </article>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="workbench">
+    <div class="section-title">
+      <div>
+        <p class="eyebrow">Roteiro</p>
+        <h2>Fases de evolução</h2>
+      </div>
+    </div>
+    <div class="phase-list">
+      {% for number, title, text in phases %}
+        <article>
+          <span>{{ number }}</span>
+          <div>
+            <strong>{{ title }}</strong>
+            <p>{{ text }}</p>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="report-grid">
+    <article class="report-card">
+      <div class="card-head">
+        <div>
+          <h2>Primeiro entregável no Django</h2>
+          <p>Colocar a base principal no banco, com busca, filtros, detalhe do contato, responsável, histórico e exportação.</p>
+        </div>
+      </div>
+      <div class="bar-list">
+        <div class="report-bar"><div><span>Login e segurança</span><b>pronto</b></div><i><em style="width: 85%"></em></i></div>
+        <div class="report-bar"><div><span>Contatos e CRM</span><b>em evolução</b></div><i><em style="width: 70%"></em></i></div>
+        <div class="report-bar"><div><span>Relatórios</span><b>em evolução</b></div><i><em style="width: 55%"></em></i></div>
+        <div class="report-bar"><div><span>WhatsApp API</span><b>planejado</b></div><i><em style="width: 20%"></em></i></div>
+      </div>
+    </article>
+
+    <article class="report-card">
+      <div class="card-head">
+        <div>
+          <h2>Decisões que o sistema deve apoiar</h2>
+          <p>O objetivo não é só guardar dados, mas orientar ação política e operação do gabinete.</p>
+        </div>
+      </div>
+      <table>
+        <tbody>
+          <tr><td>Onde visitar</td><td>Cidades e bairros com maior potencial ou demanda.</td></tr>
+          <tr><td>Quem acionar</td><td>Lideranças, grupos, apoiadores e responsáveis.</td></tr>
+          <tr><td>O que priorizar</td><td>Emendas, pautas, retorno de demandas e mobilização.</td></tr>
+          <tr><td>Como medir</td><td>Atendimentos, conversões, qualidade da base e cobertura territorial.</td></tr>
+        </tbody>
+      </table>
+    </article>
+  </section>
+</main>
+{% endblock %}
