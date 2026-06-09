@@ -78,6 +78,10 @@ def pct(value, total):
     return round((value / total) * 100, 1) if total else 0
 
 
+def width(value, max_value):
+    return min(100, max(2, int(round((value / max_value) * 100)))) if max_value else 2
+
+
 def top_counter_rows(counter, total, limit=10):
     return [
         {
@@ -161,6 +165,103 @@ def reports(request):
         "hour_rows": top_counter_rows(Counter({f"{hour:02d}h": count for hour, count in hour_counter.items()}), sum(hour_counter.values()), 8),
     }
     return render(request, "dashboard/reports.html", context)
+
+
+@login_required
+def strategic_panel(request):
+    data = {
+        "updated_at": "Abril de 2026",
+        "total_map": 21169,
+        "total_crm": 3476,
+        "municipalities": 146,
+        "leaders": 556,
+        "supporters": 4264,
+        "duplicates": 667,
+        "with_phone": 21166,
+        "without_city": 4277,
+        "sources": [
+            ("Edital de Emendas Participativas", 6842, "blue"),
+            ("WhatsApp", 5092, "green"),
+            ("Instagram", 2609, "purple"),
+            ("Apoiadores de redes sociais", 824, "amber"),
+            ("Mapeamento", 692, "blue"),
+            ("Formulário", 595, "green"),
+            ("Visita", 509, "red"),
+            ("Facebook", 431, "purple"),
+        ],
+        "profiles": [
+            ("1º Apoiador", 3409, "blue"),
+            ("2º Divulgador", 591, "green"),
+            ("2º Mobiliza redes", 231, "purple"),
+            ("3º Ação de rua", 70, "red"),
+            ("2º Ação de rua", 36, "amber"),
+        ],
+        "cities": [
+            ("Campo Grande", 12098, "Muito quente"),
+            ("Dourados", 947, "Quente"),
+            ("Corumbá", 894, "Quente"),
+            ("Paranaíba", 210, "Morno"),
+            ("Naviraí", 176, "Morno"),
+            ("Aquidauana", 125, "Morno"),
+            ("Nova Andradina", 132, "Morno"),
+            ("Mundo Novo", 138, "Morno"),
+            ("Anastácio", 84, "Morno"),
+            ("Ponta Porã", 112, "Morno"),
+        ],
+        "crm_status": [
+            ("Coletando dados", 2829, "blue"),
+            ("1 contato", 352, "green"),
+            ("Lixo", 109, "red"),
+            ("Mapeamento 3.0", 86, "purple"),
+            ("Lideranças PT", 27, "green"),
+            ("Apresentando redes", 18, "blue"),
+        ],
+        "leader_categories": [
+            ("Liderança de Base", 237, "green"),
+            ("Liderança Geral", 123, "blue"),
+            ("Liderança Partidária PT", 107, "purple"),
+            ("Liderança de Entidades", 86, "amber"),
+            ("Liderança de Bairro", 3, "blue"),
+        ],
+        "emendas_summary": [
+            ("Maior execução territorial", "Use o mapa para ver onde o valor destinado se concentra."),
+            ("Situação", "Cruze pago, empenhado e indicado para acompanhar pendências."),
+            ("Ministérios", "Saúde, MIDR, Educação e Cidades ajudam a separar pauta por área."),
+            ("Conferência", "Clique em cada município para ver objetos, situação e valores pagos."),
+        ],
+    }
+
+    total_general = data["total_map"] + data["total_crm"]
+    max_source = max(value for _, value, _ in data["sources"])
+    max_profile = max(value for _, value, _ in data["profiles"])
+    max_city = max(value for _, value, _ in data["cities"])
+    max_status = max(value for _, value, _ in data["crm_status"])
+
+    context = {
+        **data,
+        "total_general": total_general,
+        "phone_pct": pct(data["with_phone"], data["total_map"]),
+        "city_pct": pct(data["total_map"] - data["without_city"], data["total_map"]),
+        "map_share": pct(data["total_map"], total_general),
+        "crm_share": pct(data["total_crm"], total_general),
+        "sources_rows": [
+            (label, value, color, width(value, max_source))
+            for label, value, color in data["sources"]
+        ],
+        "profile_rows": [
+            (label, value, color, width(value, max_profile))
+            for label, value, color in data["profiles"]
+        ],
+        "city_rows": [
+            (label, value, zone, width(value, max_city))
+            for label, value, zone in data["cities"]
+        ],
+        "status_rows": [
+            (label, value, color, width(value, max_status))
+            for label, value, color in data["crm_status"]
+        ],
+    }
+    return render(request, "dashboard/strategic_panel.html", context)
 
 
 @login_required

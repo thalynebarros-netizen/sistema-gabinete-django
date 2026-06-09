@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+
+{% block title %}Painel Estratégico | Gabinete CJ{% endblock %}
+{% block page_label %}Painel estratégico{% endblock %}
+
+{% block content %}
+<main class="page-shell">
+  <section class="reports-hero strategic-hero">
+    <div>
+      <p class="eyebrow">Mapeamento Digital 2022-2026</p>
+      <h1>Painel Estratégico</h1>
+      <p>Base unificada com mapeamento territorial, leads CRM, lideranças, apoiadores e informações de emendas.</p>
+    </div>
+    <div class="report-actions">
+      <span>Atualizado em {{ updated_at }}</span>
+      <a class="primary-action" href="{% url 'contacts:list' %}">Buscar contatos</a>
+    </div>
+  </section>
+
+  <section class="report-metrics">
+    <article><span>Total geral</span><strong>{{ total_general }}</strong><small>registros mapeados</small></article>
+    <article><span>Mapeamento</span><strong>{{ total_map }}</strong><small>{{ map_share }}% da base</small></article>
+    <article><span>Leads CRM</span><strong>{{ total_crm }}</strong><small>{{ crm_share }}% da base</small></article>
+    <article><span>Municípios</span><strong>{{ municipalities }}</strong><small>localidades distintas</small></article>
+    <article><span>Lideranças</span><strong>{{ leaders }}</strong><small>base política organizada</small></article>
+  </section>
+
+  <section class="report-grid">
+    <article class="report-card">
+      <div class="card-head">
+        <div>
+          <h2>Fontes do mapeamento</h2>
+          <p>Principais canais de origem da base digital.</p>
+        </div>
+      </div>
+      <div class="bar-list">
+        {% for label, value, color, row_width in sources_rows %}
+          <div class="report-bar color-{{ color }}">
+            <div><span>{{ label }}</span><b>{{ value }}</b></div>
+            <i><em style="width: {{ row_width }}%"></em></i>
+          </div>
+        {% endfor %}
+      </div>
+    </article>
+
+    <article class="report-card">
+      <div class="card-head">
+        <div>
+          <h2>Qualidade da base</h2>
+          <p>Indicadores de preenchimento e limpeza.</p>
+        </div>
+      </div>
+      <div class="quality-grid compact-quality">
+        <article>
+          <span>Com telefone</span>
+          <strong>{{ phone_pct }}%</strong>
+          <i><em style="width: {{ phone_pct }}%"></em></i>
+          <small>{{ with_phone }} contatos</small>
+        </article>
+        <article>
+          <span>Com cidade</span>
+          <strong>{{ city_pct }}%</strong>
+          <i><em style="width: {{ city_pct }}%"></em></i>
+          <small>{{ without_city }} sem cidade</small>
+        </article>
+        <article>
+          <span>Duplicatas removidas</span>
+          <strong>{{ duplicates }}</strong>
+          <i><em class="warn" style="width: 18%"></em></i>
+          <small>limpeza realizada</small>
+        </article>
+      </div>
+    </article>
+  </section>
+
+  <section class="report-grid">
+    <article class="report-card">
+      <div class="card-head">
+        <div>
+          <h2>Mapa de calor territorial</h2>
+          <p>Cidades com maior concentração de contatos.</p>
+        </div>
+      </div>
+      <div class="city-ranking city-heat-list">
+        {% for label, value, zone, row_width in city_rows %}
+          <div>
+            <span>{{ forloop.counter }}</span>
+            <strong>{{ label }}</strong>
+            <em>{{ value }} · {{ zone }}</em>
+          </div>
+        {% endfor %}
+      </div>
+    </article>
+
+    <article class="report-card">
+      <div class="card-head">
+        <div>
+          <h2>Perfis de apoiadores</h2>
+          <p>Pirâmide de engajamento político.</p>
+        </div>
+      </div>
+      <div class="bar-list">
+        {% for label, value, color, row_width in profile_rows %}
+          <div class="report-bar color-{{ color }}">
+            <div><span>{{ label }}</span><b>{{ value }}</b></div>
+            <i><em style="width: {{ row_width }}%"></em></i>
+          </div>
+        {% endfor %}
+      </div>
+    </article>
+  </section>
+
+  <section class="report-grid">
+    <article class="report-card">
+      <div class="card-head">
+        <div>
+          <h2>Status CRM</h2>
+          <p>Leads organizados por etapa de relacionamento.</p>
+        </div>
+      </div>
+      <div class="bar-list">
+        {% for label, value, color, row_width in status_rows %}
+          <div class="report-bar color-{{ color }}">
+            <div><span>{{ label }}</span><b>{{ value }}</b></div>
+            <i><em style="width: {{ row_width }}%"></em></i>
+          </div>
+        {% endfor %}
+      </div>
+    </article>
+
+    <article class="report-card">
+      <div class="card-head">
+        <div>
+          <h2>Lideranças</h2>
+          <p>Categorias estratégicas para mobilização.</p>
+        </div>
+      </div>
+      <div class="leadership-grid">
+        {% for label, value, color in leader_categories %}
+          <div class="leadership-card color-{{ color }}">
+            <strong>{{ value }}</strong>
+            <span>{{ label }}</span>
+          </div>
+        {% endfor %}
+      </div>
+    </article>
+  </section>
+
+  <section class="report-card">
+    <div class="card-head">
+      <div>
+        <h2>Emendas destinadas</h2>
+        <p>Leituras estratégicas que também devem migrar para banco e mapa no Django.</p>
+      </div>
+    </div>
+    <div class="phase-list">
+      {% for title, text in emendas_summary %}
+        <article>
+          <span>{{ forloop.counter }}</span>
+          <div>
+            <strong>{{ title }}</strong>
+            <p>{{ text }}</p>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </section>
+</main>
+{% endblock %}
