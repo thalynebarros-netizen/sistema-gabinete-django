@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Dashboard | PITEP CJ{% endblock %}
+{% block title %}Dashboard | Gabinete CJ{% endblock %}
 {% block page_label %}Dashboard{% endblock %}
 
 {% block content %}
@@ -45,10 +45,10 @@
         <strong>Pessoas</strong>
         <small>Consulte a base geral por nome, telefone, cidade, fonte ou observação.</small>
       </a>
-      <a class="tool-card amber" href="{% url 'dashboard:pitep' %}">
-        <span class="tool-icon">✦</span>
-        <strong>Plano PITEP</strong>
-        <small>Entenda as fases para transformar o painel em sistema inteligente do gabinete.</small>
+      <a class="tool-card amber" href="{% url 'dashboard:strategic_panel' %}">
+        <span class="tool-icon">◈</span>
+        <strong>Painel estratégico</strong>
+        <small>Acompanhe mapeamento, CRM, lideranças, apoiadores e informações territoriais.</small>
       </a>
     </div>
   </section>

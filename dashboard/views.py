@@ -33,37 +33,6 @@ def home(request):
     return render(request, "dashboard/home.html", context)
 
 
-@login_required
-def pitep(request):
-    context = {
-        "pillars": [
-            {
-                "title": "Base única de contatos",
-                "text": "Consolidar mapeamento, CRM, lideranças, grupos, emendas e histórico de atendimento em um banco pesquisável.",
-            },
-            {
-                "title": "Inteligência territorial",
-                "text": "Cruzar cidade, bairro, votação, emendas, lideranças e demandas para orientar agenda, comunicação e mobilização.",
-            },
-            {
-                "title": "CRM do gabinete",
-                "text": "Registrar contatos, retornos, responsáveis, status, próximos passos e histórico de relacionamento com cada pessoa.",
-            },
-            {
-                "title": "Automação responsável",
-                "text": "Preparar fluxos de WhatsApp, lembretes e relatórios sem perder controle humano, consentimento e segurança dos dados.",
-            },
-        ],
-        "phases": [
-            ("1", "Organizar dados", "Padronizar planilhas, campos, cidades, telefones e fontes."),
-            ("2", "Migrar para Django", "Usar banco de dados, login, permissões e telas internas para a equipe."),
-            ("3", "Criar operação diária", "Atendimento, tarefas, segmentos, busca avançada e relatórios para coordenação."),
-            ("4", "Automatizar e medir", "WhatsApp API, indicadores de resposta, mapas de calor e análises estratégicas."),
-        ],
-    }
-    return render(request, "dashboard/pitep.html", context)
-
-
 def get_crm_contacts():
     return Contact.objects.filter(
         Q(source_payload__crm_luva__isnull=False) | Q(source="CRM Luva")
