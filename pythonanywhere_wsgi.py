@@ -11,9 +11,12 @@ import sys
 
 USERNAME = "SEU_USUARIO_PYTHONANYWHERE"
 PROJECT_PATH = f"/home/{USERNAME}/sistema-gabinete-django"
+VENDOR_PATH = f"{PROJECT_PATH}/vendor"
 
 if PROJECT_PATH not in sys.path:
     sys.path.insert(0, PROJECT_PATH)
+if VENDOR_PATH not in sys.path:
+    sys.path.insert(0, VENDOR_PATH)
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
 os.environ.setdefault("DJANGO_DEBUG", "false")
