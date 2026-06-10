@@ -51,6 +51,10 @@ def width(value, max_value):
     return min(100, max(2, int(round((value / max_value) * 100)))) if max_value else 2
 
 
+def heat_radius(value, max_value, base=14, spread=48):
+    return round(base + min(spread, ((value / max_value) ** 0.5) * spread), 1) if max_value else base
+
+
 def top_counter_rows(counter, total, limit=10):
     return [
         {
@@ -138,6 +142,25 @@ def reports(request):
 
 @login_required
 def strategic_panel(request):
+    zone_colors = {
+        "Muito quente": "#e02424",
+        "Quente": "#c4780a",
+        "Morno": "#1d6ef5",
+        "Frio": "#0d7a4e",
+        "Muito frio": "#94a3b8",
+    }
+    city_positions = {
+        "Campo Grande": (315, 276),
+        "Dourados": (284, 414),
+        "Corumbá": (120, 173),
+        "Paranaíba": (497, 219),
+        "Naviraí": (335, 463),
+        "Aquidauana": (195, 273),
+        "Nova Andradina": (419, 405),
+        "Mundo Novo": (353, 518),
+        "Anastácio": (202, 282),
+        "Ponta Porã": (236, 457),
+    }
     data = {
         "updated_at": "Abril de 2026",
         "total_map": 21169,
@@ -205,6 +228,7 @@ def strategic_panel(request):
     max_profile = max(value for _, value, _ in data["profiles"])
     max_city = max(value for _, value, _ in data["cities"])
     max_status = max(value for _, value, _ in data["crm_status"])
+    max_heat_city = max(value for _, value, _ in data["cities"])
 
     context = {
         **data,
@@ -223,6 +247,20 @@ def strategic_panel(request):
         ],
         "city_rows": [
             (label, value, zone, width(value, max_city))
+            for label, value, zone in data["cities"]
+        ],
+        "heat_points": [
+            {
+                "city": label,
+                "value": value,
+                "zone": zone,
+                "color": zone_colors.get(zone, "#94a3b8"),
+                "x": city_positions.get(label, (240, 260))[0],
+                "y": city_positions.get(label, (240, 260))[1],
+                "halo": heat_radius(value, max_heat_city),
+                "core": max(5, round(heat_radius(value, max_heat_city) * 0.34, 1)),
+                "label_x": min(city_positions.get(label, (240, 260))[0] + heat_radius(value, max_heat_city) + 8, 560),
+            }
             for label, value, zone in data["cities"]
         ],
         "status_rows": [

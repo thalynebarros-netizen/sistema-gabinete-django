@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Painel Estratégico | Gabinete CJ{% endblock %}
 {% block page_label %}Painel estratégico{% endblock %}
@@ -11,6 +12,7 @@
       <h1>Painel Estratégico</h1>
       <p>Base unificada com mapeamento territorial, leads CRM, lideranças, apoiadores e informações de emendas.</p>
     </div>
+    <img class="strategic-portrait" src="{% static 'img/camila.png' %}" alt="Camila Jara">
     <div class="report-actions">
       <span>Atualizado em {{ updated_at }}</span>
       <a class="primary-action" href="{% url 'contacts:list' %}">Buscar contatos</a>
@@ -78,17 +80,34 @@
       <div class="card-head">
         <div>
           <h2>Mapa de calor territorial</h2>
-          <p>Cidades com maior concentração de contatos.</p>
+          <p>Mapa real de Mato Grosso do Sul com manchas proporcionais ao volume de contatos.</p>
         </div>
       </div>
-      <div class="city-ranking city-heat-list">
-        {% for label, value, zone, row_width in city_rows %}
-          <div>
-            <span>{{ forloop.counter }}</span>
-            <strong>{{ label }}</strong>
-            <em>{{ value }} · {{ zone }}</em>
-          </div>
-        {% endfor %}
+      <div class="django-ms-map-wrap">
+        <svg class="django-ms-map" viewBox="0 0 600 553" role="img" aria-label="Mapa de calor de Mato Grosso do Sul">
+          <image href="{% static 'img/mapa-mato-grosso-do-sul.webp' %}" x="0" y="0" width="600" height="553" preserveAspectRatio="xMidYMid meet"></image>
+          <rect class="django-ms-map-overlay" x="0" y="0" width="600" height="553"></rect>
+          <g class="django-city-areas">
+            {% for point in heat_points %}
+              <circle cx="{{ point.x }}" cy="{{ point.y }}" r="{{ point.halo }}" fill="{{ point.color }}"></circle>
+            {% endfor %}
+          </g>
+          <g class="django-city-points">
+            {% for point in heat_points %}
+              <g class="django-map-point">
+                <title>{{ point.city }} - {{ point.value }} contatos - {{ point.zone }}</title>
+                <circle class="point-halo" cx="{{ point.x }}" cy="{{ point.y }}" r="{{ point.halo }}" fill="{{ point.color }}"></circle>
+                <circle class="point-core" cx="{{ point.x }}" cy="{{ point.y }}" r="{{ point.core }}" fill="{{ point.color }}"></circle>
+                <text x="{{ point.label_x }}" y="{{ point.y|add:4 }}">{{ point.city }}</text>
+              </g>
+            {% endfor %}
+          </g>
+        </svg>
+        <div class="map-legend">
+          <span><i style="background:#e02424"></i>Muito quente</span>
+          <span><i style="background:#c4780a"></i>Quente</span>
+          <span><i style="background:#1d6ef5"></i>Morno</span>
+        </div>
       </div>
     </article>
 

@@ -1041,11 +1041,100 @@ textarea { font: inherit; }
   background:
     radial-gradient(circle at 92% 10%, rgba(245, 164, 0, .18), transparent 28%),
     linear-gradient(135deg, #fff, #f2efff 55%, #fff7e6);
+  overflow: hidden;
+  position: relative;
+}
+
+.strategic-portrait {
+  align-self: stretch;
+  border: 1px solid rgba(255,255,255,.74);
+  border-radius: 8px;
+  box-shadow: 0 18px 38px rgba(28,35,65,.18);
+  height: 170px;
+  object-fit: cover;
+  object-position: center 24%;
+  width: 230px;
 }
 
 .city-heat-list div:nth-child(1) span { background: var(--red-soft); color: var(--red); }
 .city-heat-list div:nth-child(2) span,
 .city-heat-list div:nth-child(3) span { background: var(--amber-soft); color: #9a6500; }
+
+.django-ms-map-wrap {
+  display: grid;
+  gap: 12px;
+}
+
+.django-ms-map {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: block;
+  height: auto;
+  max-height: 520px;
+  width: 100%;
+}
+
+.django-ms-map image {
+  filter: saturate(.92) contrast(1.02);
+}
+
+.django-ms-map-overlay {
+  fill: rgba(255, 255, 255, .10);
+}
+
+.django-city-areas {
+  mix-blend-mode: multiply;
+}
+
+.django-city-areas circle {
+  opacity: .34;
+  stroke: rgba(255,255,255,.72);
+  stroke-width: 2;
+}
+
+.django-map-point .point-halo {
+  opacity: .26;
+}
+
+.django-map-point .point-core {
+  filter: drop-shadow(0 4px 8px rgba(15, 23, 42, .35));
+  stroke: #fff;
+  stroke-width: 2.5;
+}
+
+.django-map-point text {
+  fill: #0f172a;
+  font-size: 12px;
+  font-weight: 900;
+  paint-order: stroke;
+  stroke: #fff;
+  stroke-linejoin: round;
+  stroke-width: 5px;
+}
+
+.map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  justify-content: center;
+}
+
+.map-legend span {
+  align-items: center;
+  color: var(--muted);
+  display: inline-flex;
+  font-size: .82rem;
+  font-weight: 850;
+  gap: 6px;
+}
+
+.map-legend i {
+  border-radius: 50%;
+  display: inline-block;
+  height: 10px;
+  width: 10px;
+}
 
 .leadership-grid {
   display: grid;
@@ -1139,6 +1228,11 @@ th {
 
   .lead-actions {
     justify-content: flex-start;
+  }
+
+  .strategic-portrait {
+    height: 220px;
+    width: 100%;
   }
 
   .page-shell {
