@@ -10,7 +10,7 @@
     <div>
       <p class="eyebrow">Mapeamento Digital 2022-2026</p>
       <h1>Painel Estratégico</h1>
-      <p>Base unificada com mapeamento territorial, leads CRM, lideranças, apoiadores e informações de emendas.</p>
+      <p>Base unificada com mapeamento territorial, leads CRM, lideranças, apoiadores, votação de 2022 e emendas destinadas.</p>
     </div>
     <img class="strategic-portrait" src="{% static 'img/camila.png' %}" alt="Camila Jara">
     <div class="report-actions">
@@ -23,8 +23,8 @@
     <article><span>Total geral</span><strong>{{ total_general }}</strong><small>registros mapeados</small></article>
     <article><span>Mapeamento</span><strong>{{ total_map }}</strong><small>{{ map_share }}% da base</small></article>
     <article><span>Leads CRM</span><strong>{{ total_crm }}</strong><small>{{ crm_share }}% da base</small></article>
-    <article><span>Municípios</span><strong>{{ municipalities }}</strong><small>localidades distintas</small></article>
-    <article><span>Lideranças</span><strong>{{ leaders }}</strong><small>base política organizada</small></article>
+    <article><span>Votação 2022</span><strong>{{ election.total }}</strong><small>{{ election.municipalities }} municípios</small></article>
+    <article><span>Emendas</span><strong>{{ emendas.total_projects }}</strong><small>{{ emendas.municipalities }} municípios</small></article>
   </section>
 
   <section class="report-grid">
@@ -75,22 +75,20 @@
     </article>
   </section>
 
-  <section class="report-grid">
-    <article class="report-card">
-      <div class="card-head">
-        <div>
-          <h2>Mapa de calor territorial</h2>
-          <p>Mapa real de Mato Grosso do Sul com manchas proporcionais ao volume de contatos.</p>
-        </div>
+  <section class="report-card mb16">
+    <div class="card-head">
+      <div>
+        <h2>Mapa de calor territorial</h2>
+        <p>Presença territorial da base por cidade. As manchas indicam concentração de contatos.</p>
       </div>
+    </div>
+    <div class="map-rank-layout">
       <div class="django-ms-map-wrap">
-        <svg class="django-ms-map" viewBox="0 0 600 553" role="img" aria-label="Mapa de calor de Mato Grosso do Sul">
+        <svg class="django-ms-map" viewBox="0 0 600 553" role="img" aria-label="Mapa de calor territorial de Mato Grosso do Sul">
           <image href="{% static 'img/mapa-mato-grosso-do-sul.webp' %}" x="0" y="0" width="600" height="553" preserveAspectRatio="xMidYMid meet"></image>
           <rect class="django-ms-map-overlay" x="0" y="0" width="600" height="553"></rect>
           <g class="django-city-areas">
-            {% for point in heat_points %}
-              <circle cx="{{ point.x }}" cy="{{ point.y }}" r="{{ point.halo }}" fill="{{ point.color }}"></circle>
-            {% endfor %}
+            {% for point in heat_points %}<circle cx="{{ point.x }}" cy="{{ point.y }}" r="{{ point.halo }}" fill="{{ point.color }}"></circle>{% endfor %}
           </g>
           <g class="django-city-points">
             {% for point in heat_points %}
@@ -109,8 +107,91 @@
           <span><i style="background:#1d6ef5"></i>Morno</span>
         </div>
       </div>
+      <div class="city-ranking city-heat-list">
+        {% for label, value, zone, row_width in city_rows %}
+          <div><span>{{ forloop.counter }}</span><strong>{{ label }}</strong><em>{{ value }} contatos · {{ zone }}</em></div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section class="report-grid">
+    <article class="report-card">
+      <div class="card-head">
+        <div>
+          <h2>Mapa de calor da votação 2022</h2>
+          <p>Votos de Camila Jara por município em 2022.</p>
+        </div>
+      </div>
+      <div class="django-ms-map-wrap">
+        <svg class="django-ms-map compact-map" viewBox="0 0 600 553" role="img" aria-label="Mapa de votação 2022">
+          <image href="{% static 'img/mapa-mato-grosso-do-sul.webp' %}" x="0" y="0" width="600" height="553" preserveAspectRatio="xMidYMid meet"></image>
+          <rect class="django-ms-map-overlay" x="0" y="0" width="600" height="553"></rect>
+          <g class="django-city-areas">
+            {% for point in election_points %}<circle cx="{{ point.x }}" cy="{{ point.y }}" r="{{ point.halo }}" fill="{{ point.color }}"></circle>{% endfor %}
+          </g>
+          <g class="django-city-points">
+            {% for point in election_points %}
+              <g class="django-map-point">
+                <title>{{ point.city }} - {{ point.value }} votos - {{ point.zone }}</title>
+                <circle class="point-core" cx="{{ point.x }}" cy="{{ point.y }}" r="{{ point.core }}" fill="{{ point.color }}"></circle>
+                <text x="{{ point.label_x }}" y="{{ point.y|add:4 }}">{{ point.city }}</text>
+              </g>
+            {% endfor %}
+          </g>
+        </svg>
+      </div>
+      <div class="bar-list map-side-list">
+        {% for label, value, zone, percent, row_width in election_rows %}
+          <div class="report-bar color-purple">
+            <div><span>{{ label }}</span><b>{{ value }} votos · {{ percent }}%</b></div>
+            <i><em style="width: {{ row_width }}%"></em></i>
+          </div>
+        {% endfor %}
+      </div>
     </article>
 
+    <article class="report-card">
+      <div class="card-head">
+        <div>
+          <h2>Mapa de calor das emendas</h2>
+          <p>Valor destinado por município e volume de projetos.</p>
+        </div>
+      </div>
+      <div class="emenda-kpis">
+        <span><b>R$ {{ emendas.total_value|floatformat:2 }}</b> destinados</span>
+        <span><b>R$ {{ emendas.paid_value|floatformat:2 }}</b> pagos · {{ emendas_paid_pct }}%</span>
+      </div>
+      <div class="django-ms-map-wrap">
+        <svg class="django-ms-map compact-map" viewBox="0 0 600 553" role="img" aria-label="Mapa de emendas destinadas">
+          <image href="{% static 'img/mapa-mato-grosso-do-sul.webp' %}" x="0" y="0" width="600" height="553" preserveAspectRatio="xMidYMid meet"></image>
+          <rect class="django-ms-map-overlay" x="0" y="0" width="600" height="553"></rect>
+          <g class="django-city-areas">
+            {% for point in emendas_points %}<circle cx="{{ point.x }}" cy="{{ point.y }}" r="{{ point.halo }}" fill="{{ point.color }}"></circle>{% endfor %}
+          </g>
+          <g class="django-city-points">
+            {% for point in emendas_points %}
+              <g class="django-map-point">
+                <title>{{ point.city }} - R$ {{ point.value|floatformat:2 }} destinados - {{ point.zone }}</title>
+                <circle class="point-core" cx="{{ point.x }}" cy="{{ point.y }}" r="{{ point.core }}" fill="{{ point.color }}"></circle>
+                <text x="{{ point.label_x }}" y="{{ point.y|add:4 }}">{{ point.city }}</text>
+              </g>
+            {% endfor %}
+          </g>
+        </svg>
+      </div>
+      <div class="bar-list map-side-list">
+        {% for label, value, zone, quantity, paid, row_width in emendas_rows %}
+          <div class="report-bar color-amber">
+            <div><span>{{ label }}</span><b>R$ {{ value|floatformat:0 }} · {{ quantity }} emendas</b></div>
+            <i><em style="width: {{ row_width }}%"></em></i>
+          </div>
+        {% endfor %}
+      </div>
+    </article>
+  </section>
+
+  <section class="report-grid">
     <article class="report-card">
       <div class="card-head">
         <div>
@@ -127,9 +208,7 @@
         {% endfor %}
       </div>
     </article>
-  </section>
 
-  <section class="report-grid">
     <article class="report-card">
       <div class="card-head">
         <div>
@@ -146,19 +225,38 @@
         {% endfor %}
       </div>
     </article>
+  </section>
+
+  <section class="report-grid">
+    <article class="report-card">
+      <div class="card-head">
+        <div>
+          <h2>Temas das emendas</h2>
+          <p>Áreas com maior volume de projetos destinados.</p>
+        </div>
+      </div>
+      <div class="bar-list">
+        {% for label, value, color, row_width in theme_rows %}
+          <div class="report-bar color-{{ color }}">
+            <div><span>{{ label }}</span><b>{{ value }}</b></div>
+            <i><em style="width: {{ row_width }}%"></em></i>
+          </div>
+        {% endfor %}
+      </div>
+    </article>
 
     <article class="report-card">
       <div class="card-head">
         <div>
-          <h2>Lideranças</h2>
-          <p>Categorias estratégicas para mobilização.</p>
+          <h2>Situação das emendas</h2>
+          <p>Status de acompanhamento da execução.</p>
         </div>
       </div>
-      <div class="leadership-grid">
-        {% for label, value, color in leader_categories %}
-          <div class="leadership-card color-{{ color }}">
-            <strong>{{ value }}</strong>
-            <span>{{ label }}</span>
+      <div class="bar-list">
+        {% for label, value, color, row_width in situation_rows %}
+          <div class="report-bar color-{{ color }}">
+            <div><span>{{ label }}</span><b>{{ value }}</b></div>
+            <i><em style="width: {{ row_width }}%"></em></i>
           </div>
         {% endfor %}
       </div>
@@ -168,19 +266,16 @@
   <section class="report-card">
     <div class="card-head">
       <div>
-        <h2>Emendas destinadas</h2>
-        <p>Leituras estratégicas que também devem migrar para banco e mapa no Django.</p>
+        <h2>Lideranças</h2>
+        <p>Categorias estratégicas para mobilização.</p>
       </div>
     </div>
-    <div class="phase-list">
-      {% for title, text in emendas_summary %}
-        <article>
-          <span>{{ forloop.counter }}</span>
-          <div>
-            <strong>{{ title }}</strong>
-            <p>{{ text }}</p>
-          </div>
-        </article>
+    <div class="leadership-grid">
+      {% for label, value, color in leader_categories %}
+        <div class="leadership-card color-{{ color }}">
+          <strong>{{ value }}</strong>
+          <span>{{ label }}</span>
+        </div>
       {% endfor %}
     </div>
   </section>

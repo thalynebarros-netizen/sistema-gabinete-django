@@ -152,14 +152,24 @@ def strategic_panel(request):
     city_positions = {
         "Campo Grande": (315, 276),
         "Dourados": (284, 414),
-        "Corumbá": (120, 173),
-        "Paranaíba": (497, 219),
-        "Naviraí": (335, 463),
+        "Corumb?": (120, 173),
+        "Parana?ba": (497, 219),
+        "Navira?": (335, 463),
         "Aquidauana": (195, 273),
         "Nova Andradina": (419, 405),
         "Mundo Novo": (353, 518),
-        "Anastácio": (202, 282),
-        "Ponta Porã": (236, 457),
+        "Anast?cio": (202, 282),
+        "Ponta Por?": (236, 457),
+        "Tr?s Lagoas": (468, 324),
+        "Coxim": (270, 126),
+        "Chapad?o do Sul": (460, 154),
+        "Rio Brilhante": (304, 373),
+        "Sidrol?ndia": (264, 322),
+        "Bodoquena": (152, 291),
+        "Amambai": (249, 492),
+        "Bonito": (168, 336),
+        "Aral Moreira": (232, 489),
+        "Nioaque": (207, 323),
     }
     data = {
         "updated_at": "Abril de 2026",
@@ -177,49 +187,105 @@ def strategic_panel(request):
             ("Instagram", 2609, "purple"),
             ("Apoiadores de redes sociais", 824, "amber"),
             ("Mapeamento", 692, "blue"),
-            ("Formulário", 595, "green"),
+            ("Formul?rio", 595, "green"),
             ("Visita", 509, "red"),
             ("Facebook", 431, "purple"),
         ],
         "profiles": [
-            ("1º Apoiador", 3409, "blue"),
-            ("2º Divulgador", 591, "green"),
-            ("2º Mobiliza redes", 231, "purple"),
-            ("3º Ação de rua", 70, "red"),
-            ("2º Ação de rua", 36, "amber"),
+            ("1? Apoiador", 3409, "blue"),
+            ("2? Divulgador", 591, "green"),
+            ("2? Mobiliza redes", 231, "purple"),
+            ("3? A??o de rua", 70, "red"),
+            ("2? A??o de rua", 36, "amber"),
         ],
         "cities": [
             ("Campo Grande", 12098, "Muito quente"),
             ("Dourados", 947, "Quente"),
-            ("Corumbá", 894, "Quente"),
-            ("Paranaíba", 210, "Morno"),
-            ("Naviraí", 176, "Morno"),
+            ("Corumb?", 894, "Quente"),
+            ("Parana?ba", 210, "Morno"),
+            ("Navira?", 176, "Morno"),
             ("Aquidauana", 125, "Morno"),
             ("Nova Andradina", 132, "Morno"),
             ("Mundo Novo", 138, "Morno"),
-            ("Anastácio", 84, "Morno"),
-            ("Ponta Porã", 112, "Morno"),
+            ("Anast?cio", 84, "Morno"),
+            ("Ponta Por?", 112, "Morno"),
         ],
+        "election": {
+            "total": 56552,
+            "municipalities": 79,
+            "source": "TSE - vota??o por se??o 2022 MS",
+            "cities": [
+                ("Campo Grande", 37737, "Muito quente", 66.73),
+                ("Dourados", 2497, "Quente", 4.42),
+                ("Corumb?", 1384, "Quente", 2.45),
+                ("Tr?s Lagoas", 1224, "Quente", 2.16),
+                ("Nova Andradina", 1085, "Quente", 1.92),
+                ("Coxim", 857, "Morno", 1.52),
+                ("Ponta Por?", 737, "Morno", 1.30),
+                ("Aquidauana", 710, "Morno", 1.26),
+                ("Chapad?o do Sul", 662, "Morno", 1.17),
+                ("Rio Brilhante", 638, "Morno", 1.13),
+                ("Sidrol?ndia", 529, "Morno", 0.94),
+                ("Parana?ba", 521, "Morno", 0.92),
+            ],
+        },
+        "emendas": {
+            "total_projects": 263,
+            "total_value": 217065354.71,
+            "paid_value": 135236888.91,
+            "to_pay_value": 82253307.45,
+            "municipalities": 58,
+            "cities": [
+                ("Campo Grande", 24932594.00, "Muito quente", 23, 18007594.00),
+                ("Aquidauana", 5699396.00, "Quente", 7, 4605186.00),
+                ("Corumb?", 5444812.00, "Quente", 8, 3194812.00),
+                ("Coxim", 4154969.21, "Quente", 4, 1230000.00),
+                ("Nova Andradina", 3967452.00, "Quente", 7, 2219900.00),
+                ("Bodoquena", 3599433.00, "Morno", 5, 1936470.00),
+                ("Ponta Por?", 3380000.00, "Morno", 3, 2000000.00),
+                ("Amambai", 3230000.00, "Morno", 6, 1880000.00),
+                ("Bonito", 3132009.58, "Morno", 4, 1909781.58),
+                ("Aral Moreira", 2967176.00, "Morno", 3, 1000000.00),
+                ("Navira?", 2943920.00, "Morno", 4, 993920.00),
+                ("Nioaque", 2811031.00, "Morno", 9, 280000.00),
+            ],
+            "themes": [
+                ("Sa?de", 133, "green"),
+                ("MIDR", 38, "blue"),
+                ("Educa??o", 16, "purple"),
+                ("Cidades", 14, "amber"),
+                ("MDS", 13, "red"),
+                ("Economia", 11, "blue"),
+            ],
+            "situations": [
+                ("Pago", 140, "green"),
+                ("Indicado", 76, "amber"),
+                ("Empenhado", 24, "blue"),
+                ("Publicado", 14, "purple"),
+                ("Entregue", 2, "green"),
+                ("Pago parcial", 1, "amber"),
+            ],
+        },
         "crm_status": [
             ("Coletando dados", 2829, "blue"),
             ("1 contato", 352, "green"),
             ("Lixo", 109, "red"),
             ("Mapeamento 3.0", 86, "purple"),
-            ("Lideranças PT", 27, "green"),
+            ("Lideran?as PT", 27, "green"),
             ("Apresentando redes", 18, "blue"),
         ],
         "leader_categories": [
-            ("Liderança de Base", 237, "green"),
-            ("Liderança Geral", 123, "blue"),
-            ("Liderança Partidária PT", 107, "purple"),
-            ("Liderança de Entidades", 86, "amber"),
-            ("Liderança de Bairro", 3, "blue"),
+            ("Lideran?a de Base", 237, "green"),
+            ("Lideran?a Geral", 123, "blue"),
+            ("Lideran?a Partid?ria PT", 107, "purple"),
+            ("Lideran?a de Entidades", 86, "amber"),
+            ("Lideran?a de Bairro", 3, "blue"),
         ],
         "emendas_summary": [
-            ("Maior execução territorial", "Use o mapa para ver onde o valor destinado se concentra."),
-            ("Situação", "Cruze pago, empenhado e indicado para acompanhar pendências."),
-            ("Ministérios", "Saúde, MIDR, Educação e Cidades ajudam a separar pauta por área."),
-            ("Conferência", "Clique em cada município para ver objetos, situação e valores pagos."),
+            ("Maior execu??o territorial", "Use o mapa para ver onde o valor destinado se concentra."),
+            ("Situa??o", "Cruze pago, empenhado e indicado para acompanhar pend?ncias."),
+            ("Minist?rios", "Sa?de, MIDR, Educa??o e Cidades ajudam a separar pauta por ?rea."),
+            ("Confer?ncia", "Clique em cada munic?pio para ver objetos, situa??o e valores pagos."),
         ],
     }
 
@@ -229,6 +295,31 @@ def strategic_panel(request):
     max_city = max(value for _, value, _ in data["cities"])
     max_status = max(value for _, value, _ in data["crm_status"])
     max_heat_city = max(value for _, value, _ in data["cities"])
+    max_election = max(value for _, value, _, _ in data["election"]["cities"])
+    max_emendas = max(value for _, value, _, _, _ in data["emendas"]["cities"])
+    max_theme = max(value for _, value, _ in data["emendas"]["themes"])
+    max_situation = max(value for _, value, _ in data["emendas"]["situations"])
+
+    def map_points(rows, max_value, value_index=1, zone_index=2):
+        points = []
+        for row in rows:
+            label = row[0]
+            value = row[value_index]
+            zone = row[zone_index]
+            x, y = city_positions.get(label, (240, 260))
+            radius = heat_radius(value, max_value)
+            points.append({
+                "city": label,
+                "value": value,
+                "zone": zone,
+                "color": zone_colors.get(zone, "#94a3b8"),
+                "x": x,
+                "y": y,
+                "halo": radius,
+                "core": max(5, round(radius * 0.34, 1)),
+                "label_x": min(x + radius + 8, 560),
+            })
+        return points
 
     context = {
         **data,
@@ -237,36 +328,18 @@ def strategic_panel(request):
         "city_pct": pct(data["total_map"] - data["without_city"], data["total_map"]),
         "map_share": pct(data["total_map"], total_general),
         "crm_share": pct(data["total_crm"], total_general),
-        "sources_rows": [
-            (label, value, color, width(value, max_source))
-            for label, value, color in data["sources"]
-        ],
-        "profile_rows": [
-            (label, value, color, width(value, max_profile))
-            for label, value, color in data["profiles"]
-        ],
-        "city_rows": [
-            (label, value, zone, width(value, max_city))
-            for label, value, zone in data["cities"]
-        ],
-        "heat_points": [
-            {
-                "city": label,
-                "value": value,
-                "zone": zone,
-                "color": zone_colors.get(zone, "#94a3b8"),
-                "x": city_positions.get(label, (240, 260))[0],
-                "y": city_positions.get(label, (240, 260))[1],
-                "halo": heat_radius(value, max_heat_city),
-                "core": max(5, round(heat_radius(value, max_heat_city) * 0.34, 1)),
-                "label_x": min(city_positions.get(label, (240, 260))[0] + heat_radius(value, max_heat_city) + 8, 560),
-            }
-            for label, value, zone in data["cities"]
-        ],
-        "status_rows": [
-            (label, value, color, width(value, max_status))
-            for label, value, color in data["crm_status"]
-        ],
+        "sources_rows": [(label, value, color, width(value, max_source)) for label, value, color in data["sources"]],
+        "profile_rows": [(label, value, color, width(value, max_profile)) for label, value, color in data["profiles"]],
+        "city_rows": [(label, value, zone, width(value, max_city)) for label, value, zone in data["cities"]],
+        "heat_points": map_points(data["cities"], max_heat_city),
+        "election_rows": [(label, value, zone, percent, width(value, max_election)) for label, value, zone, percent in data["election"]["cities"]],
+        "election_points": map_points(data["election"]["cities"], max_election),
+        "emendas_rows": [(label, value, zone, quantity, paid, width(value, max_emendas)) for label, value, zone, quantity, paid in data["emendas"]["cities"]],
+        "emendas_points": map_points(data["emendas"]["cities"], max_emendas),
+        "theme_rows": [(label, value, color, width(value, max_theme)) for label, value, color in data["emendas"]["themes"]],
+        "situation_rows": [(label, value, color, width(value, max_situation)) for label, value, color in data["emendas"]["situations"]],
+        "emendas_paid_pct": pct(data["emendas"]["paid_value"], data["emendas"]["total_value"]),
+        "status_rows": [(label, value, color, width(value, max_status)) for label, value, color in data["crm_status"]],
     }
     return render(request, "dashboard/strategic_panel.html", context)
 
